@@ -79,5 +79,5 @@ app.post("/addTodo", (req, res) => {
 });
 
 app.listen(1234, () => {
-  console.log("Server is running on port 1234 ==>");
+  console.log("Server is running on port 1234 ==+>");
 });
