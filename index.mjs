@@ -78,6 +78,39 @@ app.post("/addTodo", (req, res) => {
   });
 });
 
+app.get("/userInfo/:id", async (req, res) => {
+  const id = req.params.id;
+  const query = `SELECT * FROM users WHERE id = ?`;
+  const userinfo = await new Promise((resolve, reject) => {
+    db.get(query, [id], function (err, row) {
+      if (err) {
+        return reject(err);
+      }
+      if (!row) {
+        return reject(new Error("User not found"));
+      }
+      return resolve(row);
+    });
+  });
+  const query2 = `SELECT id,description FROM todos WHERE userId = ?`;
+  const userdata = await new Promise((resolve, reject) => {
+    db.all(query2, [id], function (err, row) {
+      if (err) {
+        return reject(err);
+      }
+      if (!row) {
+        return reject(new Error("User data not found"));
+      }
+      return resolve(row);
+    });
+  });
+  res.status(200).json({
+    msg: "user info",
+    userInfo: userinfo,
+    userData: userdata,
+  });
+});
+
 app.listen(1234, () => {
   console.log("Server is running on port 1234 ==+>");
 });
